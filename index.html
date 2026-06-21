@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moccamaster Ratio Calculator</title>
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAADvklEQVR4nO3cy20TURiGYQdRAWKBaAEkdpGoIFREEVSUtJA1NSAWiBpYRIosOV80tudc/sPzrJPR2OedmTM333z6+uUAL3kzegWYlziIxEEkDiJxEImDSBxE4iASB5E4iMRBJA4icRCJg0gcROIgEgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDqJF4vjx+e+Ei6ruZoG37I+H8/vPd5MsagHl43hxQ79sXHdc1BoWOawc23E4/+cyDtXjON3WLx7OHRe1jMJxmIS2VjUOU40OSsahjD5KxnHKJLSFenGYhHZTLA6T0J6KxXE42biv2dZ3XNSS6sVh59FNvTjoplgczkp6KhbHKUeZdsrHQTv14nBk6aZeHKccWRpZIQ4aKRmHI0sfJeM45cjSwiJx0ELVOBxZOqgaxylHlt2tEwe7q/3eyvMmfv2hYcdFLePt6BW4lslHO7X3HDRlzkEkDiJxEImDSBxE4iASB9G8F8Ee7x9Gr8J5br/djV6Fnc14EaxcFsdWSmS6w0rpMg711//YXHGs8c2u8SkOU8WxzHd6WOWzTBQHs5kljjU2tWMLfKJZ4mBC4iASB5E4iMRBJA4icRCJg2jeW/arev3i2FQ3dcXRw/arpcd/OTwUcbR1zUX0p/8dmMgsD/sscCeiqSGJmJDWMGTjEUcZ/fsQRyWP9w89ExFHPd36cLbSVZpXzjkfd7bSyZbTjbO+hA7nL+Jo7txR3P5VtO7DnKOtC8Zv+7+03qLE0dDFW/btt7vh184P4mjn+tHdfZpyLnFMbez+QxxN7DioA/sQR3ntjizi2N8Mc8ldiKOAUbWJg0gcROIgEgeROAoYdVdSHPtb5g6zOMprd6IrjiZ23HkM3A+JY2pjj1DiaOX6cd2yhKYXT8XR0MV9dH4FIRFHWxeM8TzPkHo1obnt70PP9vS5ODp5PZFzdzB97tOKo6sZZhLbmXPU0+3xDnuOSjo/9WPPUUb/58HEUYNf9lnNLiM68O03c462nsb1spOU4U+xi6OH42H2O6REUw3/68w5iMRBJA4icRCJg0gcROIgEgfRLHEUujS00QKfaJY4mNBEcSywqT1b47PM8vPW7z9+GL0K+/vz6/foVbjKRHsOZiMOInEQiYNIHETiIJrlMcHqZ31LsucgEgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxE4iASB5E4iMRBJA4icRCJg0gcROIgEgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDiJxEImD6B/Ulvgh92UiTwAAAABJRU5ErkJggg==">
+<style>
+  :root {
+    --green: #3F5347;
+    --green-dark: #2B392F;
+    --cream: #F5F1E8;
+    --ink: #1E241F;
+    --muted: #6B7268;
+    --line: #D9D2C2;
+    --accent: #B5651D;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 24px 16px 60px;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 420px;
+  }
+
+  header {
+    margin-bottom: 28px;
+  }
+
+  .eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0 0 4px;
+    color: var(--green-dark);
+  }
+
+  .sub {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  .input-block {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  .label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+
+  label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--green-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .unit-toggle {
+    display: flex;
+    background: var(--cream);
+    border-radius: 8px;
+    padding: 3px;
+    gap: 3px;
+  }
+
+  .unit-toggle button {
+    border: none;
+    background: transparent;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 6px;
+    color: var(--muted);
+    cursor: pointer;
+  }
+
+  .unit-toggle button.active {
+    background: var(--green);
+    color: white;
+  }
+
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--line);
+    outline: none;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--green);
+    border: 3px solid white;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    cursor: pointer;
+  }
+
+  .value-display {
+    font-family: Georgia, serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--green-dark);
+    min-width: 64px;
+    text-align: right;
+  }
+
+  .preset-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+
+  .preset {
+    flex: 1;
+    min-width: 70px;
+    border: 1px solid var(--line);
+    background: white;
+    border-radius: 8px;
+    padding: 8px 6px;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .preset.active {
+    background: var(--green);
+    border-color: var(--green);
+  }
+
+  .preset .cups {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--green-dark);
+  }
+
+  .preset.active .cups {
+    color: white;
+  }
+
+  .preset .oz {
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .preset.active .oz {
+    color: rgba(255,255,255,0.75);
+  }
+
+  .results {
+    background: var(--green-dark);
+    border-radius: 14px;
+    padding: 22px 20px;
+    color: white;
+  }
+
+  .results h2 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.6);
+    margin: 0 0 16px;
+    font-weight: 600;
+  }
+
+  .result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .result-item {
+    border-left: 2px solid var(--accent);
+    padding-left: 12px;
+  }
+
+  .result-item .num {
+    font-family: Georgia, serif;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  .result-item .unit {
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+  }
+
+  .result-item .what {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgba(255,255,255,0.5);
+    margin-top: 6px;
+  }
+
+  .scoop-note {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.5;
+  }
+
+  .footer-note {
+    margin-top: 18px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  .mug-note {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+
+  .line-note {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 10px;
+    line-height: 1.4;
+  }
+
+  .fill-line {
+    font-family: Georgia, serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: white;
+  }
+
+  .switch-line {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 6px;
+  }
+
+  .info-block, .instructions-block {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px;
+    margin-top: 16px;
+  }
+
+  .info-block h3, .instructions-block h3 {
+    font-family: Georgia, serif;
+    font-size: 16px;
+    color: var(--green-dark);
+    margin: 0 0 8px;
+  }
+
+  .info-block h3:not(:first-child) {
+    margin-top: 18px;
+  }
+
+  .info-block p {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  .instructions-block ol {
+    margin: 0;
+    padding-left: 20px;
+  }
+
+  .instructions-block li {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .instructions-block li:last-child {
+    margin-bottom: 0;
+  }
+
+  .bullet-list {
+    margin: 0;
+    padding-left: 18px;
+    list-style-type: disc;
+  }
+
+  .bullet-list li {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+
+  .bullet-list li:last-child {
+    margin-bottom: 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <header>
+    <div class="eyebrow">Technivorm Moccamaster</div>
+    <h1>Ratio Calculator</h1>
+    <div class="sub">Tell it how many real mugs you want — it handles the cup-line confusion and the scoop math.</div>
+  </header>
+
+  <div class="input-block">
+    <div class="label-row">
+      <label>How many actual mugs?</label>
+    </div>
+    <div class="slider-row">
+      <input type="range" id="mugSlider" min="1" max="4" value="1" step="1">
+      <div class="value-display" id="mugValue">1 mug</div>
+    </div>
+    <div class="mug-note">Calibrated off your own machine: the "4-Cup" line (16oz) made exactly 1 real mug.</div>
+
+    <div class="preset-row" id="presetRow">
+      <div class="preset active" data-oz="16"><div class="cups">"4-Cup" line</div><div class="oz">16oz</div></div>
+      <div class="preset" data-oz="24"><div class="cups">"6-Cup" line</div><div class="oz">24oz</div></div>
+      <div class="preset" data-oz="40"><div class="cups">"10-Cup" line</div><div class="oz">40oz</div></div>
+      <div class="preset" data-oz="60"><div class="cups">"15-Cup" line</div><div class="oz">60oz</div></div>
+    </div>
+    <div class="line-note">Tap a reservoir line directly if you're filling by the markings on the tank. Cup-One isn't shown — that's a separate single-serve machine, not a setting on your KBGV.</div>
+  </div>
+
+  <div class="results">
+    <h2>Fill water to</h2>
+    <div class="fill-line" id="fillLineOut">40oz — the "10-Cup" line</div>
+    <div class="switch-line" id="switchLineOut">Brew-Volume Selector: large icon (8–10 cup side)</div>
+
+    <h2 style="margin-top:20px;">Coffee Needed</h2>
+    <div class="result-grid">
+      <div class="result-item">
+        <div class="num" id="gramsOut">69</div>
+        <div class="unit">grams</div>
+        <div class="what">Weight</div>
+      </div>
+      <div class="result-item">
+        <div class="num" id="scoopsOut">7</div>
+        <div class="unit">Moccamaster scoops</div>
+        <div class="what">Level, not heaping</div>
+      </div>
+    </div>
+    <div class="scoop-note" id="scoopNote">Matches the official 10-Cup / 1.25L chart exactly: 7 level scoops, 69g (±5).</div>
+  </div>
+
+  <div class="info-block">
+    <h3>Why the lines don't mean what they say</h3>
+    <p>Moccamaster's printed chart covers their <em>whole</em> product line, not just your machine — <strong>Cup-One is a separate single-serve brewer</strong>, not a setting on your KBGV, so it's left off here. On your machine, the <strong>"4-Cup" line (16oz) made exactly 1 real mug</strong> when you tested it — that's the actual ratio used throughout this calculator, not a generic assumption.</p>
+
+    <h3>The scoop isn't a regular tablespoon</h3>
+    <p>The Moccamaster scoop that came with your machine is sized so that <strong>1 level scoop = 2 tbsp</strong> exactly, per their own spec. Use that scoop, not a kitchen tablespoon eyeballed twice.</p>
+  </div>
+
+  <div class="instructions-block">
+    <h3>Brew Steps</h3>
+    <ol>
+      <li>Power switch off.</li>
+      <li>Attach outlet arm to the reservoir, snug fit.</li>
+      <li>Fill reservoir with fresh, cool water to your target line above. Replace lid.</li>
+      <li>Place a No. 4 filter in brew basket, rinse with water.</li>
+      <li>Add ground coffee — use the scoop/gram count above.</li>
+      <li>Brew basket onto bracket, lid on, outlet arm centered over it.</li>
+      <li>Carafe into position on the hotplate.</li>
+      <li>Set the Brew-Volume Selector to match (small icon = 4–6 cup, large icon = 8–10 cup).</li>
+      <li>Plug into grounded outlet, power switch ON.</li>
+      <li>Brewing starts immediately — water boils, rises through the arm, pulses into the basket. Takes about 4–6 minutes for a full pot.</li>
+    </ol>
+  </div>
+
+  <div class="instructions-block">
+    <h3>Best Practices</h3>
+    <ul class="bullet-list">
+      <li><strong>Grind size:</strong> medium to medium-coarse. Most pre-ground bagged coffee is too fine for this machine — grind at home or have it ground fresh for drip at purchase.</li>
+      <li><strong>Filters:</strong> No. 4, oxygen-whitened. Skip gold-mesh/reusable filters — Moccamaster specifically advises against them for inconsistent extraction and difficult cleaning.</li>
+      <li><strong>Water:</strong> fresh tap, filtered, or bottled is fine. Avoid distilled or reverse-osmosis water — it can damage the boiling element over time.</li>
+      <li><strong>If coffee's too strong:</strong> add hot water to the finished cup. <strong>If too weak:</strong> don't add more grounds — switch roast or origin instead. That's Moccamaster's own guidance, not just a preference.</li>
+      <li><strong>Minimum brew volume:</strong> don't brew under 16oz (4 cups) on this machine — smaller amounts don't extract evenly.</li>
+      <li><strong>High altitude:</strong> water boils cooler at elevation (as low as 198°F vs. 212°F at sea level), so brews run slightly cooler too. Normal, not a malfunction.</li>
+    </ul>
+  </div>
+
+  <div class="instructions-block">
+    <h3>Cleaning & Descaling</h3>
+    <ul class="bullet-list">
+      <li><strong>After every brew:</strong> hand-wash carafe and brew basket with mild dish soap, rinse well. Carafes aren't dishwasher safe.</li>
+      <li><strong>Never use:</strong> abrasive cleaners, steel wool, or a bottle brush on the carafe — can scratch the glass liner and lead to breakage.</li>
+      <li><strong>Exterior:</strong> wipe down with a moist cloth regularly.</li>
+      <li><strong>Descale every 100 brew cycles</strong> (roughly every box of 100 filters) or at minimum every 3 months. Use Urnex® or Durgol® descaling products — follow their directions.</li>
+      <li><strong>Do not use vinegar</strong> to descale — Moccamaster specifically advises against it; it doesn't fully remove buildup and can leave a lingering odor that taints future brews.</li>
+      <li><strong>After descaling:</strong> run 2 full reservoirs of plain water through the machine to clear out any remaining descaling product before brewing coffee again.</li>
+      <li><strong>Storing for 1+ week or off-season:</strong> unplug, remove the outlet arm, empty remaining water by holding the brewer upside down over the sink, then replace the arm before next use.</li>
+    </ul>
+  </div>
+
+  <div class="instructions-block">
+    <h3>Beans & Grinding</h3>
+    <ul class="bullet-list">
+      <li><strong>Grind setting:</strong> medium, similar to coarse sand or kosher salt — matches the "medium to medium-coarse" Moccamaster recommends.</li>
+      <li><strong>Roast level:</strong> medium roast, not light or dark. Light roasts run acidic/sour; dark roasts can taste bitter or burnt.</li>
+      <li><strong>Origin:</strong> favor Central/South American beans (Colombia, Brazil, Guatemala, Honduras) for a smooth, low-acid, chocolatey cup. East African origins (Ethiopia, Kenya) lean bright and acidic — skip these if you don't like sourness.</li>
+      <li><strong>Tasting notes to look for:</strong> chocolate, caramel, nutty, brown sugar, smooth, balanced. <strong>Avoid:</strong> bright, juicy, floral, winey, citrus, berry — all signal high acid.</li>
+      <li><strong>Freshness:</strong> buy whole bean, check for a roast date (not "best by") within 1–2 weeks. Grind right before brewing — pre-ground coffee stales fast and can't be fixed by anything downstream.</li>
+      <li><strong>Storage:</strong> airtight, opaque container, room temp, away from light. Not the fridge — condensation does more harm than the cold helps.</li>
+      <li><strong>Buy small:</strong> what you'll drink in 2–3 weeks, not a big bag that sits open for months.</li>
+    </ul>
+  </div>
+
+  <div class="footer-note">From your KBGV Select brew guide and product manual. Scoop counts round to the nearest level scoop — use the gram figure for precision if you're weighing.</div>
+</div>
+
+<script>
+  const GRAMS_PER_OZ = 55 / 33.814; // 55g per liter, Moccamaster's own standard
+  const OZ_PER_MUG = 16; // confirmed on your machine: "4-Cup" line (16oz) made exactly 1 real mug
+
+  const mugSlider = document.getElementById('mugSlider');
+  const mugValue = document.getElementById('mugValue');
+  const fillLineOut = document.getElementById('fillLineOut');
+  const switchLineOut = document.getElementById('switchLineOut');
+  const gramsOut = document.getElementById('gramsOut');
+  const scoopsOut = document.getElementById('scoopsOut');
+  const scoopNote = document.getElementById('scoopNote');
+  const presets = document.querySelectorAll('.preset');
+
+  // From the official chart, Cup-One removed (separate machine, not a setting on this brewer)
+  const chartLines = [
+    { oz: 16, scoops: 3, grams: 28, label: '"4-Cup" line' },
+    { oz: 24, scoops: 4, grams: 41, label: '"6-Cup" line' },
+    { oz: 40, scoops: 7, grams: 69, label: '"10-Cup" line' },
+    { oz: 60, scoops: 10, grams: 99, label: '"15-Cup" line' }
+  ];
+
+  function nearestLine(oz) {
+    return chartLines.reduce((best, cur) =>
+      Math.abs(cur.oz - oz) < Math.abs(best.oz - oz) ? cur : best
+    );
+  }
+
+  function switchPosition(oz) {
+    // KBGV Select switch is binary: small icon = 4-6 cup, large icon = 8-10 cup
+    return oz <= 24
+      ? 'Brew-Volume Selector: small icon (4–6 cup side)'
+      : 'Brew-Volume Selector: large icon (8–10 cup side)';
+  }
+
+  function render(oz, isExact, lineData) {
+    let grams, scoops, label;
+
+    if (isExact) {
+      grams = lineData.grams;
+      scoops = lineData.scoops;
+      label = lineData.label;
+      scoopNote.textContent = `Matches the official ${lineData.label} chart exactly: ${scoops} level scoops, ${grams}g (±5).`;
+    } else {
+      grams = Math.round(oz * GRAMS_PER_OZ);
+      scoops = Math.round(grams / 9.9);
+      const near = nearestLine(oz);
+      label = `between lines, closest to ${near.label} (${near.oz}oz)`;
+      scoopNote.textContent = `Calculated from the 55g/liter standard. Round to the nearest half scoop.`;
+    }
+
+    fillLineOut.textContent = `${oz}oz — ${label}`;
+    switchLineOut.textContent = switchPosition(oz);
+    gramsOut.textContent = grams;
+    scoopsOut.textContent = scoops;
+
+    presets.forEach(p => {
+      p.classList.toggle('active', parseFloat(p.dataset.oz) === (isExact ? lineData.oz : nearestLine(oz).oz));
+    });
+  }
+
+  function updateFromMugs() {
+    const mugs = parseInt(mugSlider.value);
+    mugValue.textContent = mugs + (mugs === 1 ? ' mug' : ' mugs');
+    const targetOz = mugs * OZ_PER_MUG;
+    const exact = chartLines.find(c => c.oz === targetOz);
+    render(targetOz, !!exact, exact || nearestLine(targetOz));
+  }
+
+  mugSlider.addEventListener('input', updateFromMugs);
+
+  presets.forEach(p => {
+    p.addEventListener('click', () => {
+      const oz = parseFloat(p.dataset.oz);
+      const lineData = chartLines.find(c => c.oz === oz);
+      render(oz, true, lineData);
+      mugSlider.value = Math.round(oz / OZ_PER_MUG);
+      mugValue.textContent = mugSlider.value + (mugSlider.value === '1' ? ' mug' : ' mugs');
+    });
+  });
+
+  updateFromMugs();
+</script>
+
+</body>
+</html>
