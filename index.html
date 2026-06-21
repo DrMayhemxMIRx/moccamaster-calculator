@@ -349,14 +349,15 @@
       <label>How many actual mugs?</label>
     </div>
     <div class="slider-row">
-      <input type="range" id="mugSlider" min="1" max="4" value="1" step="1">
+      <input type="range" id="mugSlider" min="1" max="4" value="1" step="0.5">
       <div class="value-display" id="mugValue">1 mug</div>
     </div>
-    <div class="mug-note">Calibrated off your own machine: the "4-Cup" line (16oz) made exactly 1 real mug.</div>
+    <div class="mug-note">Calibrated off your own mug: 16oz fill made 1 mug (≈12oz brewed, 1.5 US cups). Scales linearly from there.</div>
 
     <div class="preset-row" id="presetRow">
       <div class="preset active" data-oz="16"><div class="cups">"4-Cup" line</div><div class="oz">16oz</div></div>
       <div class="preset" data-oz="24"><div class="cups">"6-Cup" line</div><div class="oz">24oz</div></div>
+      <div class="preset" data-oz="32"><div class="cups">"8-Cup" line</div><div class="oz">32oz</div></div>
       <div class="preset" data-oz="40"><div class="cups">"10-Cup" line</div><div class="oz">40oz</div></div>
       <div class="preset" data-oz="60"><div class="cups">"15-Cup" line</div><div class="oz">60oz</div></div>
     </div>
@@ -446,6 +447,31 @@
     </ul>
   </div>
 
+  <div class="instructions-block">
+    <h3>Full Reference Chart</h3>
+    <p style="font-size:13.5px; color:var(--muted); line-height:1.5; margin:0 0 14px;">Straight from the printed Moccamaster guide, if you ever want to skip the calculator and just read it off the chart. Note: European "cup" = 4oz, not a real mug — use the calculator above for actual mug counts.</p>
+    <table style="width:100%; border-collapse:collapse; font-size:12.5px;">
+      <thead>
+        <tr style="background:var(--green-dark); color:white;">
+          <th style="padding:6px 4px; text-align:left; font-weight:600;">Water</th>
+          <th style="padding:6px 4px; text-align:left; font-weight:600;">Cups</th>
+          <th style="padding:6px 4px; text-align:left; font-weight:600;">Oz</th>
+          <th style="padding:6px 4px; text-align:left; font-weight:600;">Scoops</th>
+          <th style="padding:6px 4px; text-align:left; font-weight:600;">Grams</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid var(--line);"><td style="padding:6px 4px;">1.8L</td><td style="padding:6px 4px;">15-Cup</td><td style="padding:6px 4px;">60oz</td><td style="padding:6px 4px;">10</td><td style="padding:6px 4px;">99g</td></tr>
+        <tr style="border-bottom:1px solid var(--line);"><td style="padding:6px 4px;">1.25L</td><td style="padding:6px 4px;">10-Cup</td><td style="padding:6px 4px;">40oz</td><td style="padding:6px 4px;">7</td><td style="padding:6px 4px;">69g</td></tr>
+        <tr style="border-bottom:1px solid var(--line);"><td style="padding:6px 4px;">1L</td><td style="padding:6px 4px;">8-Cup</td><td style="padding:6px 4px;">32oz</td><td style="padding:6px 4px;">6</td><td style="padding:6px 4px;">55g</td></tr>
+        <tr style="border-bottom:1px solid var(--line);"><td style="padding:6px 4px;">3/4L</td><td style="padding:6px 4px;">6-Cup</td><td style="padding:6px 4px;">24oz</td><td style="padding:6px 4px;">4</td><td style="padding:6px 4px;">41g</td></tr>
+        <tr style="border-bottom:1px solid var(--line);"><td style="padding:6px 4px;">1/2L</td><td style="padding:6px 4px;">4-Cup</td><td style="padding:6px 4px;">16oz</td><td style="padding:6px 4px;">3</td><td style="padding:6px 4px;">28g</td></tr>
+        <tr><td style="padding:6px 4px;">0.3L</td><td style="padding:6px 4px;">Cup-One*</td><td style="padding:6px 4px;">10oz</td><td style="padding:6px 4px;">2</td><td style="padding:6px 4px;">17g</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:11.5px; color:var(--muted); margin:10px 0 0;">*Cup-One is a separate single-serve Moccamaster model, not a setting on your KBGV — included here only because it's on the printed chart.</p>
+  </div>
+
   <div class="footer-note">From your KBGV Select brew guide and product manual. Scoop counts round to the nearest level scoop — use the gram figure for precision if you're weighing.</div>
 </div>
 
@@ -466,6 +492,7 @@
   const chartLines = [
     { oz: 16, scoops: 3, grams: 28, label: '"4-Cup" line' },
     { oz: 24, scoops: 4, grams: 41, label: '"6-Cup" line' },
+    { oz: 32, scoops: 6, grams: 55, label: '"8-Cup" line' },
     { oz: 40, scoops: 7, grams: 69, label: '"10-Cup" line' },
     { oz: 60, scoops: 10, grams: 99, label: '"15-Cup" line' }
   ];
@@ -510,7 +537,7 @@
   }
 
   function updateFromMugs() {
-    const mugs = parseInt(mugSlider.value);
+    const mugs = parseFloat(mugSlider.value);
     mugValue.textContent = mugs + (mugs === 1 ? ' mug' : ' mugs');
     const targetOz = mugs * OZ_PER_MUG;
     const exact = chartLines.find(c => c.oz === targetOz);
@@ -524,8 +551,9 @@
       const oz = parseFloat(p.dataset.oz);
       const lineData = chartLines.find(c => c.oz === oz);
       render(oz, true, lineData);
-      mugSlider.value = Math.round(oz / OZ_PER_MUG);
-      mugValue.textContent = mugSlider.value + (mugSlider.value === '1' ? ' mug' : ' mugs');
+      const mugVal = oz / OZ_PER_MUG;
+      mugSlider.value = mugVal;
+      mugValue.textContent = mugVal + (mugVal === 1 ? ' mug' : ' mugs');
     });
   });
 
